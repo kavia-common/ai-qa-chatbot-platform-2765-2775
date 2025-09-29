@@ -1,12 +1,7 @@
 """
 API app package for weather Q&A backend.
 
-Exposes public serializers and models for reuse within the project.
+Avoid importing models/serializers at module import time to prevent
+AppRegistryNotReady during Django app population. Import needed symbols
+directly from their modules where used.
 """
-from .serializers import (
-    LoginSerializer,
-    RegisterSerializer,
-    AskSerializer,
-    ConversationSerializer,
-    MessageSerializer,
-)  # noqa: F401
