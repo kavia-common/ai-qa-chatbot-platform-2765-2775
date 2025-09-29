@@ -135,6 +135,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
+# Explicitly allow specific origins commonly used in this project.
+# Even though CORS_ALLOW_ALL_ORIGINS=True, some environments or tools may
+# still consult these lists. Including them prevents surprises.
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost',
+    'http://127.0.0.1',
+    'https://vscode-internal-14266-beta.beta01.cloud.kavia.ai:4000',
+]
+
+# Some setups use this older alias; keep in sync for compatibility.
+CORS_ORIGIN_WHITELIST = CORS_ALLOWED_ORIGINS
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
@@ -147,7 +159,11 @@ REST_FRAMEWORK = {
 
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
-CSRF_TRUSTED_ORIGINS = ['http://localhost', 'http://127.0.0.1']
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost',
+    'http://127.0.0.1',
+    'https://vscode-internal-14266-beta.beta01.cloud.kavia.ai:4000',
+]
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
