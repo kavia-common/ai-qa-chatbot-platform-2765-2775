@@ -148,6 +148,19 @@ CORS_ALLOWED_ORIGINS = [
 # Some setups use this older alias; keep in sync for compatibility.
 CORS_ORIGIN_WHITELIST = CORS_ALLOWED_ORIGINS
 
+# Allow common headers including CSRF and Authorization for preflight clarity.
+CORS_ALLOW_HEADERS = list(sorted(set([
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+])))
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
@@ -160,6 +173,15 @@ REST_FRAMEWORK = {
 
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
+
+# In HTTPS environments, mark cookies secure so browsers will accept/send them cross-site.
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Make sure frontend can read CSRF cookie value (default False would block JS access).
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_NAME = 'csrftoken'
+
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'http://127.0.0.1',

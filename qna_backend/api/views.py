@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework import permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .models import Conversation, Message
 from .serializers import (
@@ -186,3 +187,22 @@ def conversation_detail(request, conversation_id: int):
         return Response({"detail": "Conversation not found"}, status=status.HTTP_404_NOT_FOUND)
     data = ConversationSerializer(conv).data
     return Response(data)
+
+
+# PUBLIC_INTERFACE
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+@ensure_csrf_cookie
+def csrf_token(request):
+    """
+    Provide a CSRF cookie for SPA clients.
+
+    Usage:
+        - Call GET /api/csrf/ with credentials: 'include' from the frontend.
+        - The response will set the 'csrftoken' cookie.
+        - Send the token back on subsequent modifying requests via 'X-CSRFToken' header.
+
+    Returns:
+        200 OK with {"csrf": "ok"}
+    """
+    return Response({"csrf": "ok"})
