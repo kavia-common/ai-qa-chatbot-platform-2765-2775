@@ -143,6 +143,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1',
     'https://vscode-internal-14266-beta.beta01.cloud.kavia.ai:4000',
     'https://vscode-internal-10453-beta.beta01.cloud.kavia.ai:4000',
+    'https://vscode-internal-32752-beta.beta01.cloud.kavia.ai:4000',
 ]
 
 # Some setups use this older alias; keep in sync for compatibility.
@@ -187,6 +188,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1',
     'https://vscode-internal-14266-beta.beta01.cloud.kavia.ai:4000',
     'https://vscode-internal-10453-beta.beta01.cloud.kavia.ai:4000',
+    'https://vscode-internal-32752-beta.beta01.cloud.kavia.ai:4000',
 ]
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
