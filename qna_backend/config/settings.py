@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,12 +26,18 @@ SECRET_KEY = 'django-insecure-0ku_as45vs5isd^px=t#m8g#^*x7f=w#gw-xb^t@^-pom)r^t6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '.kavia.ai',
-    'localhost',
-    '127.0.0.1',
-    'testserver',
-]
+# Allow hosts from environment for flexibility. Fallback to sensible dev defaults.
+env_allowed_hosts = os.getenv('DJANGO_ALLOWED_HOSTS')
+if env_allowed_hosts:
+    ALLOWED_HOSTS = [h.strip() for h in env_allowed_hosts.split(',') if h.strip()]
+else:
+    ALLOWED_HOSTS = [
+        '.kavia.ai',
+        'localhost',
+        '127.0.0.1',
+        'testserver',
+        '*',  # development-friendly; consider tightening in production
+    ]
 
 
 # Application definition
@@ -138,13 +145,19 @@ CORS_ALLOW_CREDENTIALS = True
 # Explicitly allow specific origins commonly used in this project.
 # Even though CORS_ALLOW_ALL_ORIGINS=True, some environments or tools may
 # still consult these lists. Including them prevents surprises.
-CORS_ALLOWED_ORIGINS = [
+default_cors_allowed = [
     'http://localhost',
     'http://127.0.0.1',
     'https://vscode-internal-14266-beta.beta01.cloud.kavia.ai:4000',
     'https://vscode-internal-10453-beta.beta01.cloud.kavia.ai:4000',
     'https://vscode-internal-32752-beta.beta01.cloud.kavia.ai:4000',
+    'https://vscode-internal-24966-beta.beta01.cloud.kavia.ai:4000',
 ]
+env_cors_allowed = os.getenv('CORS_ALLOWED_ORIGINS')
+if env_cors_allowed:
+    CORS_ALLOWED_ORIGINS = [o.strip() for o in env_cors_allowed.split(',') if o.strip()]
+else:
+    CORS_ALLOWED_ORIGINS = default_cors_allowed
 
 # Some setups use this older alias; keep in sync for compatibility.
 CORS_ORIGIN_WHITELIST = CORS_ALLOWED_ORIGINS
@@ -183,13 +196,18 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_NAME = 'csrftoken'
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost',
-    'http://127.0.0.1',
-    'https://vscode-internal-14266-beta.beta01.cloud.kavia.ai:4000',
-    'https://vscode-internal-10453-beta.beta01.cloud.kavia.ai:4000',
-    'https://vscode-internal-32752-beta.beta01.cloud.kavia.ai:4000',
-]
+env_csrf_trusted = os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS')
+if env_csrf_trusted:
+    CSRF_TRUSTED_ORIGINS = [o.strip() for o in env_csrf_trusted.split(',') if o.strip()]
+else:
+    CSRF_TRUSTED_ORIGINS = [
+        'http://localhost',
+        'http://127.0.0.1',
+        'https://vscode-internal-14266-beta.beta01.cloud.kavia.ai:4000',
+        'https://vscode-internal-10453-beta.beta01.cloud.kavia.ai:4000',
+        'https://vscode-internal-32752-beta.beta01.cloud.kavia.ai:4000',
+        'https://vscode-internal-24966-beta.beta01.cloud.kavia.ai:4000',
+    ]
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
